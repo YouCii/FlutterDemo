@@ -41,22 +41,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _result = "asd";
+  String _result = "暂未执行";
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  Future<void> initPlatformState() async {
+  Future<void> _initPlatformState() async {
     try {
       _result = await FlutterPlugin.goToOtherApp;
     } on PlatformException {
@@ -80,18 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'From plugin: ' + _result,
             ),
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _initPlatformState,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
