@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo/SingleClass.dart';
+import 'package:flutter_plugin/flutter_plugin.dart';
 
 void main() {
   // 固定竖屏
@@ -41,10 +42,28 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _result = "asd";
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
   void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+  }
+
+  Future<void> initPlatformState() async {
+    try {
+      _result = await FlutterPlugin.goToOtherApp;
+    } on PlatformException {
+      _result = 'Failed to get platform version.';
+    }
+    setState(() {
+      _result = _result;
     });
   }
 
@@ -58,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              'From plugin: ' + _result,
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
