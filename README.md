@@ -58,3 +58,9 @@
               });
             }
             ```
+- 生命周期全解析
+    1. onCreate : initState或者didChangeDependencies(后者更强大)
+    2. onResume : didPush(从前一页面进入时), didPopNext(从后一页面返回时)
+    3. onPause  : didPushNext(进入到后一页面前), didPop(返回前一页面)
+    4. onDestroy: dispose
+    5. 前后台切换 : didChangeAppLifecycleState
