@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/ListPage.dart';
+import 'package:flutter_demo/RenderTreePage.dart';
 import 'package:flutter_demo/utils/SingleRouteObserver.dart';
 
 class LifecyclePage extends StatefulWidget {
@@ -38,9 +38,10 @@ class _LifecyclePageState extends State<LifecyclePage> with WidgetsBindingObserv
     super.reassemble(); // 热更新1
   }
 
+  /// 当此State被插入到其他的widget时调用, 例如 祖先节点rebuild widget时调用
   @override
   void didUpdateWidget(LifecyclePage oldWidget) {
-    super.didUpdateWidget(oldWidget); // 热更新2 ( 祖先节点rebuild widget时调用 )
+    super.didUpdateWidget(oldWidget); // 热更新2
   }
 
   @override
@@ -64,7 +65,7 @@ class _LifecyclePageState extends State<LifecyclePage> with WidgetsBindingObserv
             child: Text("下一个页面"),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ListPage();
+                return RenderTreePage();
               }));
             },
           )
@@ -73,11 +74,13 @@ class _LifecyclePageState extends State<LifecyclePage> with WidgetsBindingObserv
     );
   }
 
+  /// State对应的Element被从树中移除后调用, 可能是暂时移除
   @override
   void deactivate() {
     super.deactivate(); // 界面显隐时1: 只有第一次创建不会执行, 其余类比onResume/onPause
   }
 
+  /// State对应的Element被永久移除后调用
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // destroy2: 类比onDestroy
