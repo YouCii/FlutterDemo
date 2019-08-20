@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/LifecyclePage.dart';
+import 'package:flutter_demo/base/BasePage.dart';
+import 'package:flutter_demo/page/LifecyclePage.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +13,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends BasePageState<HomePage> {
   String _result = "暂未执行";
 
   Future<void> _initPlatformState() async {
@@ -39,8 +40,8 @@ class _HomePageState extends State<HomePage> {
             Text(
               'From plugin: ' + _result,
             ),
-            MaterialButton(
-              child: Text("下一页面"),
+            RaisedButton(
+              child: Text("LifecyclePage"),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return LifecyclePage();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo/utils/SingleRouteObserver.dart';
-import 'package:flutter_demo/HomePage.dart';
+import 'package:flutter_demo/page/HomePage.dart';
 
 void main() {
   // 固定竖屏
