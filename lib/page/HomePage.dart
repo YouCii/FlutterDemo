@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/base/BasePage.dart';
+import 'package:flutter_demo/base/BaseLifecycleState.dart';
+import 'package:flutter_demo/page/InheritedPage.dart';
 import 'package:flutter_demo/page/LifecyclePage.dart';
+import 'package:flutter_demo/page/SliverPage.dart';
+import 'package:flutter_demo/utils/ToastUtils.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:flutter/services.dart';
 
@@ -13,18 +16,14 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends BasePageState<HomePage> {
-  String _result = "暂未执行";
+class _HomePageState extends BaseLifecycleState<HomePage> {
 
-  Future<void> _initPlatformState() async {
+  Future<void> _toOtherApp() async {
     try {
-      _result = await FlutterPlugin.goToOtherApp;
+      await FlutterPlugin.goToOtherApp;
     } on PlatformException {
-      _result = 'Failed to get platform version.';
+      ToastUtils.showToast('跳转LearnApp失败');
     }
-    setState(() {
-      _result = _result;
-    });
   }
 
   @override
@@ -37,9 +36,6 @@ class _HomePageState extends BasePageState<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text(
-              'From plugin: ' + _result,
-            ),
             RaisedButton(
               child: Text("LifecyclePage"),
               onPressed: () {
@@ -47,12 +43,28 @@ class _HomePageState extends BasePageState<HomePage> {
                   return LifecyclePage();
                 }));
               },
-            )
+            ),
+            RaisedButton(
+              child: Text("SliverPage"),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return SliverPage();
+                }));
+              },
+            ),
+            RaisedButton(
+              child: Text("InheritedPage"),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return InheritedPage();
+                }));
+              },
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _initPlatformState,
+        onPressed: _toOtherApp,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),

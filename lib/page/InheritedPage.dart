@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/base/BaseLifecycleState.dart';
 import 'package:flutter_demo/widgets/MyInheritedWidget.dart';
 import 'package:flutter_demo/widgets/UseInheritedWidget.dart';
 
@@ -9,7 +10,7 @@ class InheritedPage extends StatefulWidget {
   }
 }
 
-class _InheritedState extends State<InheritedPage> {
+class _InheritedState extends BaseLifecycleState<InheritedPage> {
   int _num = 0;
 
   @override
@@ -35,7 +36,7 @@ class _InheritedState extends State<InheritedPage> {
                   _num++;
                 });
               },
-            )
+            ),
           ],
         ),
       ),

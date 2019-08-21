@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/base/BasePage.dart';
-import 'package:flutter_demo/page/InheritedPage.dart';
+import 'package:flutter_demo/base/BaseLifecycleState.dart';
 
 class LifecyclePage extends StatefulWidget {
   @override
@@ -9,7 +8,7 @@ class LifecyclePage extends StatefulWidget {
   }
 }
 
-class _LifecyclePageState extends BasePageState<LifecyclePage> {
+class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
   int _num = 0;
 
   _LifecyclePageState() {
@@ -35,7 +34,7 @@ class _LifecyclePageState extends BasePageState<LifecyclePage> {
     super.reassemble(); // 热更新1
   }
 
-  /// 当此State被插入到其他的widget时调用, 例如 祖先节点rebuild widget时调用
+  /// 当此State被插入到其他的widget时调用, 例如 祖先节点rebuild widget时可能会调用
   @override
   void didUpdateWidget(LifecyclePage oldWidget) {
     super.didUpdateWidget(oldWidget); // 热更新2
@@ -54,6 +53,20 @@ class _LifecyclePageState extends BasePageState<LifecyclePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Text(
+              '''
+1. `onCreate` : `initState`或者`didChangeDependencies`(后者更强大)
+
+2. `onResume` : `didPush`(从前一页面进入时), `didPopNext`(从后一页面返回时)
+
+3. `onPause`  : `didPushNext`(进入到后一页面前), `didPop`(返回前一页面)
+
+4. `onDestroy`: `dispose`
+
+5. 前后台切换 : `didChangeAppLifecycleState`
+              '''
+            ),
+
             RaisedButton(
               child: Text("setState:$_num"),
               onPressed: () {
@@ -62,15 +75,6 @@ class _LifecyclePageState extends BasePageState<LifecyclePage> {
                 });
               },
             ),
-            RaisedButton(
-              child: Text("InheritedPage"),
-              elevation: 2,
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return InheritedPage();
-                }));
-              },
-            )
           ],
         ),
       ),

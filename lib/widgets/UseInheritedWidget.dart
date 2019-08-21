@@ -24,7 +24,7 @@ class _UseInheritedState extends State<UseInheritedWidget> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Inherited Data: ${MyInheritedWidget.of(context).data.toString()}",
+      'Inherited Data: ${MyInheritedWidget.of(context).data.toString()}',
     );
   }
 }

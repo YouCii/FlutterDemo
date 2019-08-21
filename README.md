@@ -61,21 +61,25 @@
             }
             ```
 - 生命周期全解析
-    1. onCreate : initState或者didChangeDependencies(后者更强大)
-    2. onResume : didPush(从前一页面进入时), didPopNext(从后一页面返回时)
-    3. onPause  : didPushNext(进入到后一页面前), didPop(返回前一页面)
-    4. onDestroy: dispose
-    5. 前后台切换 : didChangeAppLifecycleState
-- 布局View层级三要素: Widget(静态不可变), Element(同时持有Widget和RenderObject, 通过dirty->performRebuild更新), RenderObject
-    1. StatelessWidget     ---(createElement)---> StatelessElement     -> element创建后, 每次element更新都会重建widget
-    2. StatefulWidget      ---(createElement)---> StatefulElement      -> element创建后, 后面根据情况update state或者create state   
-    3. RenderObjectWidget  ---(createElement)---> RenderObjectElement  -> element通过mount方法调用widget.getRenderObject, 构建出RenderObjectTree
+    1. `onCreate` : `initState`或者`didChangeDependencies`(后者更强大)
+    2. `onResume` : `didPush`(从前一页面进入时), `didPopNext`(从后一页面返回时)
+    3. `onPause`  : `didPushNext`(进入到后一页面前), `didPop`(返回前一页面)
+    4. `onDestroy`: `dispose`
+    5. 前后台切换 : `didChangeAppLifecycleState`
+- 布局`View`层级三要素: `Widget`(静态不可变), `Element`(同时持有`Widget`和`RenderObject`), `RenderObject`
+    1. `StatelessWidget`     ---(`createElement`)---> `StatelessElement`     ---> `element`创建后, 每次`element`更新都会重建`widget`
+    2. `StatefulWidget`      ---(`createElement`)---> `StatefulElement`      ---> `element`创建后, 后面根据情况`update state`或者`create state`   
+    3. `RenderObjectWidget`  ---(`createElement`)---> `RenderObjectElement`  ---> `element`通过`mount`方法调用`widget.getRenderObject`, 构建出`RenderObjectTree`
 - 刷新UI流程
     1. 应用构建时:
-        1. runApp -> RenderObjectToWidgetAdapter.attachToRenderTree
-        2. 如果renderViewElement==null: RenderObjectToWidgetAdapter通过createElement创建renderViewElement -> BuildOwner.buildScope -> renderViewElement.mount -> element.rebuild(见下方)
-        3. 如果renderViewElement!=null: renderViewElement.markNeedsBuild(见下方)
-    2. setState时: _element.markNeedsBuild(见下方) 
-    3. element.markNeedsBuild, 会把element标记为dirty, 添加到dirtyList中 -> 等待BuildOwner.buildScope被vsync调起, 执行element.rebuild
-    5. rebuild -> performRebuild -> updateChild(NormalElement) 或者 widget.updateRenderObject(RenderObjectElement)
-       
+        1. `runApp` -> `RenderObjectToWidgetAdapter.attachToRenderTree`
+        2. 如果`renderViewElement==null`: `RenderObjectToWidgetAdapter`通过`createElement`创建`renderViewElement -> BuildOwner.buildScope -> renderViewElement.mount -> element.rebuild`(见下方)
+        3. 如果`renderViewElement!=null`: `renderViewElement.markNeedsBuild`(见下方)
+    2. `setState`时: `_element.markNeedsBuild`(见下方) 
+    3. `element.markNeedsBuild`, 会把`element`标记为`dirty`, 添加到`dirtyList`中 -> 等待`BuildOwner.buildScope`被`vsync`调起, 执行`element.rebuild`
+    5. `rebuild` -> `performRebuild` -> `updateChild(NormalElement)` 或者 `widget.updateRenderObject(RenderObjectElement)`
+- 构造方法相关
+    1. 不允许在`factory`中引用当前类的示例;
+    2. 可以定义别名构造方法, 例如: `SingleObject.create();`
+    3. 如果显示声明某种形式的构造方法, 则只允许使用显示声明的构造形式;   
+- 使用`SliverAppBar`实现类似`Android#CollapsingToolbarLayout`的动画效果;    
