@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/base/BaseLifecycleState.dart';
+import 'package:flutter_demo/page/EmptyPage.dart';
 
 class LifecyclePage extends StatefulWidget {
   @override
@@ -9,7 +10,6 @@ class LifecyclePage extends StatefulWidget {
 }
 
 class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
-  int _num = 0;
 
   _LifecyclePageState() {
     print("constructor"); // create1 仅执行一次
@@ -54,7 +54,7 @@ class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              '''
+                '''
 1. `onCreate` : `initState`或者`didChangeDependencies`(后者更强大)
 
 2. `onResume` : `didPush`(从前一页面进入时), `didPopNext`(从后一页面返回时)
@@ -68,11 +68,11 @@ class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
             ),
 
             RaisedButton(
-              child: Text("setState:$_num"),
+              child: Text("GoToNext"),
               onPressed: () {
-                setState(() {
-                  _num++;
-                });
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return EmptyPage();
+                }));
               },
             ),
           ],
@@ -91,5 +91,25 @@ class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
   @override
   void dispose() {
     super.dispose(); // destroy2: 类比onDestroy
+  }
+
+  @override
+  void didPush() {
+    print('didPush');
+  }
+
+  @override
+  void didPop() {
+    print('didPop');
+  }
+
+  @override
+  void didPushNext() {
+    print('didPushNext');
+  }
+
+  @override
+  void didPopNext() {
+    print('didPopNext');
   }
 }

@@ -42,27 +42,27 @@ abstract class BaseLifecycleState<T extends StatefulWidget> extends State<T> wit
   }
 
 
-  /// Called when the top route has been popped off, and the current route shows up.
+  /// Called when the current route has been pushed.
+  /// 从前一页面进入时, 当前页面展示之前
   @override
-  void didPopNext() {
-    print('didPopNext'); // 从后一页面返回时
+  void didPush() {
   }
 
   /// Called when the current route has been popped off.
+  /// 返回前一页面时, 当前页面消失之前
   @override
   void didPop() {
-    print('didPop'); // 返回前一页面之前会调用
-  }
-
-  /// Called when the current route has been pushed.
-  @override
-  void didPush() {
-    print('didPush'); // 从前一页面进入时
   }
 
   /// Called when a new route has been pushed, and the current route is no longer visible.
+  /// 进入到后一页面时, 当前页面消失之前
   @override
   void didPushNext() {
-    print('didPushNext'); // 进入到后一页面前首先调用
+  }
+
+  /// Called when the top route has been popped off, and the current route shows up.
+  /// 从后一页面返回时, 当前页面展示之前
+  @override
+  void didPopNext() {
   }
 }
