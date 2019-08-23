@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   # 图片缓存
-  cached_network_image: ^1.0.0
+  cached_network_image: ^1.1.1
   # Toast
   fluttertoast: ^3.0.1
 

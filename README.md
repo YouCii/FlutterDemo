@@ -82,4 +82,4 @@
     1. 不允许在`factory`中引用当前类的示例;
     2. 可以定义别名构造方法, 例如: `SingleObject.create();`
     3. 如果显示声明某种形式的构造方法, 则只允许使用显示声明的构造形式;   
-- 使用`SliverAppBar`实现类似`Android#CollapsingToolbarLayout`的动画效果;    
+- 使用`SliverAppBar`实现类似`Android#CollapsingToolbarLayout`的动画效果, 增强效果;    

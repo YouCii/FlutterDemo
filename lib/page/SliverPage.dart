@@ -11,6 +11,24 @@ class SliverPage extends StatefulWidget {
 }
 
 class _SliverState extends BaseLifecycleState<SliverPage> {
+
+  double _offset = 0.0;
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.offset < 0) {
+          setState(() {
+            _offset = _scrollController.offset;
+          });
+        }
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,20 +44,41 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
             // 用于控制整体风格, 主要是调整状态栏的字体
             brightness: Brightness.dark,
             // 扩充时的最大高度
-            expandedHeight: 180,
+            expandedHeight: 180 - _offset,
             // 填充的UI
             flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
               background: CacheImage(
+                fit: BoxFit.cover,
                 imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
               ),
               title: Text('Sliver大家族'),
             ),
           ),
-          SliverList(delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-            return Text('$index');
-          }),),
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200),
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                margin: EdgeInsets.all(10),
+                child: CacheImage(
+                  fit: BoxFit.fill,
+                  imageUrl: index % 2 == 0
+                      ? "http://5b0988e595225.cdn.sohucs.com/images/20180203/bb9208badf9e4fdd9a46e7a1243f9c46.jpeg"
+                      : "https://flutter.dev/assets/homepage/carousel/slide_3-bg-8add601bda8d313eaef069c0bad40e4edee018e18777abaf79474f1ab783ca7d.jpg",
+                ),
+              );
+            },),
+          ),
         ],
+        physics: BouncingScrollPhysics(),
+        controller: _scrollController,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
