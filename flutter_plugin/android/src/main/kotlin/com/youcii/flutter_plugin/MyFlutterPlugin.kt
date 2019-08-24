@@ -8,9 +8,15 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
+/**
+ * 插件定义类
+ */
 class MyFlutterPlugin(private val activity: Activity) : MethodCallHandler {
 
     companion object {
+        /**
+         * 供给主项目引用: MyFlutterPlugin.registerWith
+         */
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "my_flutter_plugin")
@@ -26,4 +32,5 @@ class MyFlutterPlugin(private val activity: Activity) : MethodCallHandler {
             result.notImplemented()
         }
     }
+
 }
