@@ -1,5 +1,7 @@
 # FlutterDemo
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e17a4c59327e4a82b2ea64bfbacd50a2)](https://app.codacy.com/app/550341130/FlutterDemo?utm_source=github.com&utm_medium=referral&utm_content=YouCii/FlutterDemo&utm_campaign=Badge_Grade_Dashboard)
+
 测试Demo
 
 **遇到问题欢迎提Issue, 共同进步**
