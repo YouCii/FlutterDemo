@@ -10,7 +10,6 @@ class LifecyclePage extends StatefulWidget {
 }
 
 class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
-
   _LifecyclePageState() {
     print("constructor"); // create1 仅执行一次
   }
@@ -53,8 +52,7 @@ class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-                '''
+            Text('''
 1. `onCreate` : `initState`或者`didChangeDependencies`(后者更强大)
 
 2. `onResume` : `didPush`(从前一页面进入时), `didPopNext`(从后一页面返回时)
@@ -64,9 +62,7 @@ class _LifecyclePageState extends BaseLifecycleState<LifecyclePage> {
 4. `onDestroy`: `dispose`
 
 5. 前后台切换 : `didChangeAppLifecycleState`
-              '''
-            ),
-
+              '''),
             RaisedButton(
               child: Text("GoToNext"),
               onPressed: () {

@@ -88,4 +88,10 @@
     2. 可以定义别名构造方法, 例如:`SingleObject.create();`
     3. 如果显示声明某种形式的构造方法, 则只允许使用显示声明的构造形式;   
 
-- 使用`SliverAppBar`实现类似`Android#CollapsingToolbarLayout`的动画效果, 增强效果;    
+- `Sliver`家族:
+    1. `SliverAppBar`: 实现类似`Android#CollapsingToolbarLayout`的动画
+    2. `SliverGrid`: 组合Grid列表
+    3. `SliverPersistentHeader`: 可中间插入/固定在顶部/缩放的`Header`
+    4. `SliverFixedExtentList`: 比`SliverList`效果更高的组合列表(因为固定了item在主轴方向上的长度)
+    
+- `Hero#transitionOnUserGestures` 动画效果  

@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo Home Page',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        platform: TargetPlatform.iOS,
+      ),
       home: HomePage(title: 'Flutter Demo Home Page'),
       navigatorObservers: [SingleRouteObserver.getInstance()],
     );

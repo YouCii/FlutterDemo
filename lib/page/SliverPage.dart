@@ -11,7 +11,6 @@ class SliverPage extends StatefulWidget {
 }
 
 class _SliverState extends BaseLifecycleState<SliverPage> {
-
   double _offset = 0.0;
   ScrollController _scrollController;
 
@@ -48,15 +47,24 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
             // 填充的UI
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
-              background: CacheImage(
-                fit: BoxFit.cover,
-                imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
+              background: Hero(
+                tag: "FirstHero",
+                transitionOnUserGestures: true,
+                child: CacheImage(
+                  fit: BoxFit.cover,
+                  imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
+                ),
               ),
               title: Text('Sliver大家族'),
             ),
           ),
           SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 2.0,
+              crossAxisSpacing: 2.0,
+              childAspectRatio: 1,
+            ),
             delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
               return Container(
                 margin: EdgeInsets.all(10),
@@ -67,7 +75,33 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
                       : "https://flutter.dev/assets/homepage/carousel/slide_3-bg-8add601bda8d313eaef069c0bad40e4edee018e18777abaf79474f1ab783ca7d.jpg",
                 ),
               );
-            },),
+            }, childCount: 6),
+          ),
+          SliverPersistentHeader(
+            delegate: _SliverHeaderDelegate(200, 50),
+            floating: false,
+            pinned: true,
+          ),
+          SliverFixedExtentList(
+            itemExtent: 50.0,
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              return Container(
+                alignment: Alignment.center,
+                color: Colors.lightBlue[100 * (index % 9)],
+                child: Text('list item $index'),
+              );
+            }, childCount: 20),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 80,
+              color: Color(0xff551155),
+              alignment: Alignment.center,
+              child: Text(
+                "这是一个可任意插入的普通组件",
+                style: TextStyle(color: Color(0xffffffff)),
+              ),
+            ),
           ),
         ],
         physics: BouncingScrollPhysics(),
@@ -80,5 +114,30 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+}
+
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  double _maxExtent, _minExtent;
+
+  _SliverHeaderDelegate(this._maxExtent, this._minExtent);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return CacheImage(
+      fit: BoxFit.cover,
+      imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
+    );
+  }
+
+  @override
+  double get maxExtent => _maxExtent;
+
+  @override
+  double get minExtent => _minExtent;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return oldDelegate != this || oldDelegate?.maxExtent != this.maxExtent || oldDelegate?.minExtent != this.minExtent;
   }
 }
