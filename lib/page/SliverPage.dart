@@ -124,11 +124,9 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(
-      child: Container(
-        color: overlapsContent ? Colors.red : Colors.lightBlue,
-        child: Center(child: Text("$shrinkOffset")),
-      ),
+    return Container(
+      color: overlapsContent ? Colors.red : Colors.lightBlue,
+      child: Center(child: Text("$shrinkOffset")),
     );
   }
 
