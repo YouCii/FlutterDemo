@@ -75,7 +75,7 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
                       : "https://flutter.dev/assets/homepage/carousel/slide_3-bg-8add601bda8d313eaef069c0bad40e4edee018e18777abaf79474f1ab783ca7d.jpg",
                 ),
               );
-            }, childCount: 6),
+            }, childCount: 4),
           ),
           SliverPersistentHeader(
             delegate: _SliverHeaderDelegate(200, 50),
@@ -90,7 +90,7 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
                 color: Colors.lightBlue[100 * (index % 9)],
                 child: Text('list item $index'),
               );
-            }, childCount: 20),
+            }, childCount: 15),
           ),
           SliverToBoxAdapter(
             child: Container(
@@ -98,7 +98,7 @@ class _SliverState extends BaseLifecycleState<SliverPage> {
               color: Color(0xff551155),
               alignment: Alignment.center,
               child: Text(
-                "这是一个可任意插入的普通组件",
+                "可任意插入普通组件",
                 style: TextStyle(color: Color(0xffffffff)),
               ),
             ),
@@ -124,9 +124,11 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return CacheImage(
-      fit: BoxFit.cover,
-      imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
+    return SizedBox.expand(
+      child: Container(
+        color: overlapsContent ? Colors.red : Colors.lightBlue,
+        child: Center(child: Text("$shrinkOffset")),
+      ),
     );
   }
 
