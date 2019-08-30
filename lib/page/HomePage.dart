@@ -18,9 +18,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BaseLifecycleState<HomePage> {
-  Future<void> _toOtherApp() async {
+  Future<void> _invokeNativeFunction() async {
     try {
-      await FlutterPlugin.goToOtherApp;
+      await FlutterPlugin.invokeNative(123);
     } on PlatformException {
       ToastUtils.showToast('跳转LearnApp失败');
     }
@@ -33,37 +33,41 @@ class _HomePageState extends BaseLifecycleState<HomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: GestureDetector(
+          child: Container(
+            height: 100,
+            child: Hero(
+              tag: "FirstHero",
+              transitionOnUserGestures: true,
+              child: CacheImage(
+                fit: BoxFit.cover,
+                imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
+              ),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SliverPage();
+            }));
+          },
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shape: CircularNotchedRectangle(),
+        child: Row(
           children: <Widget>[
-            RaisedButton(
-              child: Text("LifecyclePage"),
+            IconButton(
+              icon: Icon(Icons.home),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return LifecyclePage();
                 }));
               },
             ),
-            GestureDetector(
-              child: Container(
-                height: 100,
-                child: Hero(
-                  tag: "FirstHero",
-                  transitionOnUserGestures: true,
-                  child: CacheImage(
-                    fit: BoxFit.cover,
-                    imageUrl: "https://flutter.dev/assets/homepage/carousel/slide_4-bg-1bcaa66df37e5707c5c58b38cbf8175902a544905d4c0e81aac5f19ee2caa6cd.jpg",
-                  ),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return SliverPage();
-                }));
-              },
-            ),
-            RaisedButton(
-              child: Text("InheritedPage"),
+            SizedBox(height: 50),
+            IconButton(
+              icon: Icon(Icons.business),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return InheritedPage();
@@ -71,13 +75,15 @@ class _HomePageState extends BaseLifecycleState<HomePage> {
               },
             ),
           ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _toOtherApp,
+        onPressed: _invokeNativeFunction,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

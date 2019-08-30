@@ -25,7 +25,7 @@ class MyFlutterPlugin(private val activity: Activity) : MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "goToOtherApp") {
+        if (call.method == "invokeNative") {
             result.success("Call Android Success")
             activity.startActivity(activity.packageManager.getLaunchIntentForPackage("com.youcii.mvplearn"))
         } else {
