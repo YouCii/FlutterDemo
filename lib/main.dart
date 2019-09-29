@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_demo/utils/SingleRouteObserver.dart';
 import 'package:flutter_demo/page/HomePage.dart';
 
-void main() {
+/// main方法和普通方法内的Future表现一致, 但是Main方法里的MicroTask方法不会优先执行,
+/// Dart事件执行顺序: Main > MicroTask Queue -> Event Queue
+Future main() async {
   // 固定竖屏
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

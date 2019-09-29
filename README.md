@@ -94,6 +94,4 @@
     2. `SliverGrid`: 组合Grid列表
     3. `SliverPersistentHeader`: 可中间插入/固定在顶部/缩放的`Header`
     4. `SliverFixedExtentList`: 比`SliverList`效果更高的组合列表(因为固定了item在主轴方向上的长度)
-    
-- `Hero#transitionOnUserGestures` 动画效果  
 
