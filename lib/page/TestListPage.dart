@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/page/FuturePage.dart';
+import 'package:flutter_demo/page/IsolatePage.dart';
 
 class TestListPage extends StatelessWidget {
   @override
@@ -8,21 +9,26 @@ class TestListPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(title: Text("测试列表")),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return RaisedButton(
-                  child: Text("Future, await"),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return FuturePage();
-                    }));
-                  },
-                );
+          SliverToBoxAdapter(
+            child: RaisedButton(
+              child: Text("Future"),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return FuturePage();
+                }));
               },
-              childCount: 1,
             ),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: RaisedButton(
+              child: Text("Isolute"),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return IsolatePage();
+                }));
+              },
+            ),
+          ),
         ],
       ),
     );
