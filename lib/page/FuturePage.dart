@@ -9,9 +9,13 @@ class FuturePage extends StatefulWidget {
 
 class _FutureState extends State<FuturePage> {
   String _log = "";
+  bool _isRunning = false;
 
   /// Future把事件插入到EventQueue的末尾
   void _test() async {
+    setState(() {
+      _isRunning = true;
+    });
     _log += "\n";
 
     _doFuture(1).then((position) {
@@ -38,6 +42,7 @@ class _FutureState extends State<FuturePage> {
     int result = await _doFuture(3);
     setState(() {
       _formatLogString("Then" + result.toString());
+      _isRunning = false;
     });
   }
 
@@ -58,14 +63,18 @@ class _FutureState extends State<FuturePage> {
       appBar: AppBar(title: Text("Future Await")),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text(_log),
-            RaisedButton(
-              child: Text("test"),
-              onPressed: () {
-                _test();
-              },
+            Expanded(child: Text(_log)),
+            Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: RaisedButton(
+                child: Text("test"),
+                onPressed: _isRunning
+                    ? null
+                    : () {
+                        _test();
+                      },
+              ),
             ),
           ],
         ),

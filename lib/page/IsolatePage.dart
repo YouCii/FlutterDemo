@@ -10,6 +10,9 @@ class IsolatePage extends StatefulWidget {
 }
 
 class _IsolateState extends State<IsolatePage> {
+  int _calNum = 40;
+  bool _isRunning = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,15 +31,33 @@ class _IsolateState extends State<IsolatePage> {
           SmoothAnimationWidget(),
           RaisedButton(
             child: Text("Compute on future"),
-            onPressed: () {
-              Future.value(fibonacci(45));
-            },
+            onPressed: _isRunning
+                ? null
+                : () {
+                    setState(() {
+                      _isRunning = true;
+                    });
+                    Future.value(fibonacci(_calNum)).then((value) {
+                      setState(() {
+                        _isRunning = false;
+                      });
+                    });
+                  },
           ),
           RaisedButton(
             child: Text("Compute on isolate"),
-            onPressed: () {
-              compute(fibonacci, 45);
-            },
+            onPressed: _isRunning
+                ? null
+                : () {
+                    setState(() {
+                      _isRunning = true;
+                    });
+                    compute(fibonacci, _calNum).then((value) {
+                      setState(() {
+                        _isRunning = false;
+                      });
+                    });
+                  },
           ),
         ],
       ),
