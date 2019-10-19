@@ -62,7 +62,6 @@
               });
             }
            ```
-           
 - 生命周期全解析
     1. `onCreate`: `initState`或者`didChangeDependencies`(后者更强大)
     2. `onResume`: `didPush`(从前一页面进入时),`didPopNext`(从后一页面返回时)
@@ -95,3 +94,7 @@
     3. `SliverPersistentHeader`: 可中间插入/固定在顶部/缩放的`Header`
     4. `SliverFixedExtentList`: 比`SliverList`效果更高的组合列表(因为固定了item在主轴方向上的长度)
 
+- 执行顺序: 同步代码 > `MicroTask Queue` > `Event Queue`, 
+  其中`EventQueue`中的`Event`包括: 
+  1. dart产生的事件: Future, Timer, Isolate之间的消息等;
+  2. 系统产生的事件: I/O, 鼠标事件, 屏幕点击等;
