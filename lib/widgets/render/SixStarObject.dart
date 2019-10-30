@@ -4,14 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 /// RenderBox内部实现了RenderObject要求必须重写的几个方法，并提供了笛卡尔二维坐标系
+/// TODO 与CustomPaint相比的优势是什么
 class SixStarObject extends RenderBox {
   final Paint _paint = Paint()
     ..strokeWidth = 2
-    ..style = PaintingStyle.stroke;
+    ..style = PaintingStyle.stroke // 画线，不填充包裹路径
+    ..isAntiAlias = true // 抗锯齿
+    ..strokeCap = StrokeCap.round // 线条端点样式
+    ..strokeJoin = StrokeJoin.round; // 线条交汇处样式
+
+  Color _paintColor;
+
+  set paintColor(Color value) {
+    if (value == _paintColor) return;
+    _paintColor = value;
+    markNeedsPaint();
+  }
+
+  double _starSize;
+
+  set starSize(value) {
+    if (_starSize == value) {
+      return;
+    }
+    _starSize = value;
+    markNeedsLayout();
+  }
 
   SixStarObject(this._paintColor, this._starSize);
 
-  /// 必须重写为true或者用RepaintBoundary包裹，否则会出现offset偏移的问题
+  /// 必须重写为true或者用[RepaintBoundary]包裹该Widget，否则会出现offset偏移的问题
   @override
   bool get isRepaintBoundary => true;
 
@@ -21,6 +43,7 @@ class SixStarObject extends RenderBox {
     super.layout(constraints, parentUsesSize: parentUsesSize);
   }
 
+  /// TODO 什么时候会出现Offset偏移，isRepaintBoundary的具体作用原理
   @override
   void paint(PaintingContext context, Offset offset) {
     _paint.color = _paintColor;
@@ -75,25 +98,5 @@ class SixStarObject extends RenderBox {
   @override
   bool hitTestChildren(BoxHitTestResult result, {Offset position}) {
     return super.hitTestChildren(result, position: position);
-  }
-
-  /* Color */
-  Color _paintColor;
-
-  set paintColor(Color value) {
-    if (value == _paintColor) return;
-    _paintColor = value;
-    markNeedsPaint();
-  }
-
-  /* widget size */
-  double _starSize;
-
-  set starSize(value) {
-    if (_starSize == value) {
-      return;
-    }
-    _starSize = value;
-    markNeedsLayout();
   }
 }

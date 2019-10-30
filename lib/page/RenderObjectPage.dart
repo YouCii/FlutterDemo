@@ -13,6 +13,8 @@ class RenderObjectPage extends StatefulWidget {
 class RenderObjectState extends State<RenderObjectPage> {
   Color _color1 = Colors.deepOrange;
   Color _color2 = Colors.greenAccent;
+  double _size1 = 0xbb;
+  double _size2 = 0xbb;
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +26,32 @@ class RenderObjectState extends State<RenderObjectPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _color1 = Color(Random().nextInt(0xffffffff) & 0xffffffff);
-              });
-            },
-            child: Container(
-              width: double.maxFinite,
-              alignment: Alignment.center,
-              child: SixStarWidget(_color1, 200),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _color2 = Color(Random().nextInt(0xffffffff) & 0xffffffff);
-              });
-            },
-            child: Container(
-              width: double.maxFinite,
-              alignment: Alignment.center,
-              child: SixStarPaint(_color2, 200),
-            ),
-          ),
+          _decorate(SixStarWidget(_color1, _size1), () {
+            _color1 = Color(Random().nextInt(0xffffff) + 0xff000000);
+            _size1 = Random().nextInt(0x88) + 0x88.toDouble();
+          }),
+          _decorate(SixStarPaint(_color2, _size2), () {
+            _color2 = Color(Random().nextInt(0xffffff) + 0xff000000);
+            _size2 = Random().nextInt(0x88) + 0x88.toDouble();
+          }),
         ],
+      ),
+    );
+  }
+
+  /// 抽出重复代码
+  Widget _decorate(Widget toShow, Function onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            onTap();
+          });
+        },
+        child: Align(
+          alignment: Alignment.center,
+          child: toShow,
+        ),
       ),
     );
   }
