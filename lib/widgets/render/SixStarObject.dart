@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-/// RenderBox内部实现了RenderObject要求必须重写的几个方法，并提供了笛卡尔二维坐标系
-/// TODO 与CustomPaint相比的优势是什么
+/// RenderBox内部实现了RenderObject要求必须重写的几个方法, 并提供了笛卡尔二维坐标系
+/// [CustomPaint]继承自[SingleChildRenderObjectWidget]: 与完全自定义的RenderBox的相比, 缺少了一自定义的API, 例如不能指定isRepaintBoundary
 class SixStarObject extends RenderBox {
   final Paint _paint = Paint()
     ..strokeWidth = 2
-    ..style = PaintingStyle.stroke // 画线，不填充包裹路径
+    ..style = PaintingStyle.stroke // 画线, 不填充包裹路径
     ..isAntiAlias = true // 抗锯齿
     ..strokeCap = StrokeCap.round // 线条端点样式
     ..strokeJoin = StrokeJoin.round; // 线条交汇处样式
@@ -33,17 +33,26 @@ class SixStarObject extends RenderBox {
 
   SixStarObject(this._paintColor, this._starSize);
 
-  /// 必须重写为true或者用[RepaintBoundary]包裹该Widget，否则会出现offset偏移的问题
+  /// 必须重写为true或者用[RepaintBoundary]包裹该Widget, 否则会出现offset偏移的问题
+  /// 在[markNeedsPaint]时会判断此属性, 如果false会调用[parent.markNeedsPaint]
+  /// [isRepaintBoundary] 绘制边界
+  /// [relayoutBoundary] 布局边界
   @override
   bool get isRepaintBoundary => true;
 
-  /// 通过查看RenderProxyBox源码发现：layout是处理的内部的Size，所以这里不用重写，在[markNeedsLayout]之前修改[size]即可
+  /// 通过查看RenderProxyBox源码发现: layout是处理的内部Size, 所以这里不用重写, 在[performLayout]时修改[size]即可
+  /// layout中最后会调用[markNeedsPaint]
+  /// [constraints] 指父节点对子节点的大小约束, 根据父节点的布局逻辑确定
+  /// [parentUsesSize] 用于确定[relayoutBoundary], 表示子节点的布局变化是否影响父节点
   @override
   void layout(Constraints constraints, {bool parentUsesSize = false}) {
     super.layout(constraints, parentUsesSize: parentUsesSize);
   }
 
-  /// TODO 什么时候会出现Offset偏移，isRepaintBoundary的具体作用原理
+  @override
+  bool get sizedByParent => false;
+
+  /// [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
   @override
   void paint(PaintingContext context, Offset offset) {
     _paint.color = _paintColor;
@@ -70,13 +79,13 @@ class SixStarObject extends RenderBox {
     canvas.drawCircle(Offset(width / 2, width / 2), width / 2, _paint);
   }
 
-  /// 必须重写此方法，否则红屏
+  /// 必须重写此方法, 否则红屏
   @override
   void performLayout() {
     size = constraints.constrain(Size(_starSize, _starSize));
   }
 
-  /// 只有父布局size改变引起当前resize时才会调用，而performLayout是各种情况引起的resize都会调用
+  /// 只有父布局size改变引起当前resize时才会调用, 而[performLayout]是各种情况引起的resize都会调用
   @override
   void performResize() {
     super.performResize();
@@ -88,7 +97,7 @@ class SixStarObject extends RenderBox {
     return super.hitTest(result, position: position);
   }
 
-  /// 作为叶子widget，如果想要监听onTap就必须return true
+  /// 作为叶子widget, 如果想要监听onTap就必须return true
   @override
   bool hitTestSelf(Offset position) {
     return true;

@@ -100,17 +100,17 @@
   2. 系统产生的事件: I/O, 鼠标事件, 屏幕点击等;
   
 - 自定义叶子`RenderObject`的关键点
-  1. 继承`RenderObject`的子类`RenderBox`更简单，它在父类的基础上实现了笛卡尔坐标系，更易用；
-  2. 必须重写`isRepaintBoundary`为true或者用`RepaintBoundary`包裹，否则会出现offset偏移的问题；
-  3. `paint`方法中需要刷新一下修改的参数，才可以支持外部`setState`调用；
-  4. 必须重写此方法修改下`size`，否则红屏错误；
+  1. 继承`RenderObject`的子类`RenderBox`更简单, 它在父类的基础上实现了笛卡尔坐标系, 更易用; 
+  2. 必须重写`isRepaintBoundary`为true或者用`RepaintBoundary`包裹, 否则会出现offset偏移的问题; 
+  3. `paint`方法中需要刷新一下修改的参数, 才可以支持外部`setState`调用; 
+  4. 必须重写此方法修改下`size`, 否则红屏错误; 
      ```dart
-      @override
-      void performLayout() {
+     @override
+     void performLayout() {
         size = constraints.constrain(Size(_starSize, _starSize));
-      }
+     }
      ```
-  5. 作为叶子widget时，如果想要监听onTap就必须重写`hitTestSelf`然后返回true；
-  6. 修改`RenderObject`的内部参数时，记得在set方法中调用`markNeedsPaint`或者`markNeedsLayout`将其标为`dirty`状态，否则`setState`不会更新它；
-  7. 使用`RenderObject`的`LeafRenderObjectWidget`需要重写`updateRenderObject`修改下UI关心的参数，否则`setState`不会更新这些参数；
-  8. `CustomPaint`和`CustomPainter`也可以实现自定义效果，但是细节有点差别；
+  5. 如果想要监听onTap就必须重写`hitTestSelf`然后按情况返回, 作为叶子widget时直接返回true; 
+  6. 修改`RenderObject`的内部参数时, 记得在set方法中调用`markNeedsPaint`或者`markNeedsLayout`将其标为`dirty`状态, 否则`setState`不会更新它; 
+  7. 使用`RenderObject`的`LeafRenderObjectWidget`需要重写`updateRenderObject`修改下UI关心的参数, 否则`setState`不会更新这些参数; 
+  8. `CustomPaint`和`CustomPainter`也可以实现自定义效果, 但是细节有点差别; 
