@@ -19,6 +19,8 @@ class SixStarWidget extends LeafRenderObjectWidget {
     return SixStarObject(_paintColor, _starSize);
   }
 
+  /// 在widget重建时会执行此方法
+  /// 这里的renderObject是复用的，如果这里不更新RenderObject, 那么UI不会改变
   @override
   void updateRenderObject(BuildContext context, SixStarObject renderObject) {
     renderObject

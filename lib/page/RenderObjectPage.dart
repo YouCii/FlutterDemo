@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/widgets/render/SixStarPaint.dart';
-import 'package:flutter_demo/widgets/render/SixStarWiget.dart';
+import 'package:flutter_demo/widgets/render/SixStarWidget.dart';
 import 'dart:math';
 
 class RenderObjectPage extends StatefulWidget {
@@ -43,6 +43,7 @@ class RenderObjectState extends State<RenderObjectPage> {
   Widget _decorate(Widget toShow, Function onTap) {
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.deferToChild,
         onTap: () {
           setState(() {
             onTap();
