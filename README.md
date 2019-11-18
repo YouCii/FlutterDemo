@@ -9,7 +9,7 @@
 ## 应用内用到的东西
 
 #### Flutter调用原生的Plugin流程
-###### `Plugin`部分
+###### Plugin部分
 1. `Plugin`的`android/ios`的`MyFlutterPlugin:MethodCallHandler`提供原生方法, 并定义`ChannelName`:
    ```kotlin
     companion object {
@@ -36,7 +36,7 @@
         androidPackage: com.youcii.flutter_plugin
         pluginClass: MyFlutterPlugin
    ```   
-###### 主项目部分:
+###### 主项目部分
 1. 主项目的`pubspec.yaml`中引用`Plugin`, 名字可自定义:
    ```yaml
     dev_dependencies:
