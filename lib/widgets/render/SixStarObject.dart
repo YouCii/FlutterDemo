@@ -52,19 +52,25 @@ class SixStarObject extends RenderBox {
   @override
   bool get isRepaintBoundary => true;
 
-  /// 通过查看兄弟类RenderProxyBox源码发现: layout是处理的内部Size, 流程基本是相同的, 所以这里不用重写, 具体的布局算法子类应该通过重写performResize() 和 performLayout()两个方法来实现
-  /// layout中最后会调用[markNeedsPaint]
+  /// 用来计算当前RenderObject布局, 并通知child调用自己的layout方法
   ///
-  /// [constraints] 指父节点对子节点的大小约束, 根据父节点的布局逻辑确定(BoxConstraints)
-  /// [parentUsesSize] 用于确定[relayoutBoundary], 表示子节点的布局变化是否影响父节点
+  /// 通过查看兄弟类RenderProxyBox源码发现: layout是处理的内部Size, RenderBox都处理好了, 所以这里不用重写,
+  /// 具体的布局算法子类应该通过重写performResize() 和 performLayout()两个方法来实现
+  ///
+  /// 1. [performLayout]和[performResize]会在此方法中被调用
+  /// 2. layout中最后会调用[markNeedsPaint]
+  ///
+  /// param: [constraints] 指父节点对子节点的大小约束, 根据父节点的布局逻辑确定(BoxConstraints)
+  /// param: [parentUsesSize] 用于确定[relayoutBoundary], 表示子节点的布局变化是否影响父节点
   @override
   void layout(Constraints constraints, {bool parentUsesSize = false}) {
     super.layout(constraints, parentUsesSize: parentUsesSize);
   }
 
-  /// [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
+  /// param: [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
   @override
   void paint(PaintingContext context, Offset offset) {
+    // 注意, 真正绘制之前需要更新下paint
     _paint.color = _paintColor;
 
     final canvas = context.canvas..translate(offset.dx, offset.dy);
@@ -112,7 +118,7 @@ class SixStarObject extends RenderBox {
   }
 
   /// Used by [hitTest]: 作为叶子widget, 想要监听onTap就必须return true
-  /// 只影响GestureDetector的behavior是deferToChild方式的表现, 不影响HitTestBehavior.opaque
+  /// 只影响GestureDetector的behavior是deferToChild方式的表现, 不影响HitTestBehavior.opaque(不透明)
   @override
   bool hitTestSelf(Offset position) {
     return true;

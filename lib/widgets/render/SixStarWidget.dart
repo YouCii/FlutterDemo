@@ -9,11 +9,13 @@ class SixStarWidget extends LeafRenderObjectWidget {
 
   SixStarWidget(this._paintColor, this._starSize);
 
+  /// 在其父Widget对应的Element的updateChild方法中调用
   @override
   LeafRenderObjectElement createElement() {
     return SixStarElement(this);
   }
 
+  /// 在mount方法中调用
   @override
   RenderObject createRenderObject(BuildContext context) {
     return SixStarObject(_paintColor, _starSize);
