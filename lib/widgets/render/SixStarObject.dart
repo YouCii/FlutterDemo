@@ -7,8 +7,8 @@ import 'package:flutter/rendering.dart';
 /// [CustomPaint]继承自[SingleChildRenderObjectWidget]: 与完全自定义的RenderBox的相比, 缺少了一自定义的API, 例如不能指定isRepaintBoundary
 ///
 /// 四部分比较重要的点:
-/// 1. [layout]和[paint], [performLayout]和[performResize]
-/// 2. [_paint], [_paintColor], [_starSize]
+/// 1. [_paint], [_paintColor], [_starSize]
+/// 2. [layout]和[paint], [performLayout]和[performResize]
 /// 3. [isRepaintBoundary]
 /// 4. [hitTest], [hitTestSelf], [hitTestChildren]
 class SixStarObject extends RenderBox {
