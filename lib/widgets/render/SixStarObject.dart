@@ -54,11 +54,9 @@ class SixStarObject extends RenderBox {
 
   /// 用来计算当前RenderObject布局, 并通知child调用自己的layout方法
   ///
-  /// 通过查看兄弟类RenderProxyBox源码发现: layout是处理的内部Size, RenderBox都处理好了, 所以这里不用重写,
-  /// 具体的布局算法子类应该通过重写performResize() 和 performLayout()两个方法来实现
-  ///
-  /// 1. [performLayout]和[performResize]会在此方法中被调用
-  /// 2. layout中最后会调用[markNeedsPaint]
+  /// 根据父类方法中的注释，子类不应该重写此方法，
+  /// 子类应该应该通过重写会在此方法中被调用的performResize()和performLayout()来完成具体的layout操作
+  /// 另外，layout中最后会调用[markNeedsPaint]
   ///
   /// param: [constraints] 指父节点对子节点的大小约束, 根据父节点的布局逻辑确定(BoxConstraints)
   /// param: [parentUsesSize] 用于确定[relayoutBoundary], 表示子节点的布局变化是否影响父节点
@@ -67,6 +65,7 @@ class SixStarObject extends RenderBox {
     super.layout(constraints, parentUsesSize: parentUsesSize);
   }
 
+  /// param: [context]含义是绘制的位置，可以自此获取到canvas对象，另外它与BuildContext没有任何联系
   /// param: [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
   @override
   void paint(PaintingContext context, Offset offset) {
