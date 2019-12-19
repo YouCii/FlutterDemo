@@ -45,7 +45,9 @@ class SixStarObject extends RenderBox {
     markNeedsLayout();
   }
 
-  SixStarObject(this._paintColor, this._starSize);
+  SixStarObject(this._paintColor, this._starSize) {
+    _paint.color = _paintColor;
+  }
 
   /// 重写为true或者用[RepaintBoundary]包裹该Widget时会规定此Widget不会影响父布局, 如果不重写可能会出现相对于父布局的offset偏移
   /// 在[markNeedsPaint]时会判断此属性, 如果false会调用[parent.markNeedsPaint]
