@@ -28,6 +28,7 @@ class SixStarObject extends RenderBox {
       return;
     }
     _paintColor = value;
+    _paint.color = _paintColor;
     // 在属性变化时更新PipelineOwner的待paint待更新列表: PipelineOwner._nodesNeedingPaint.add(this);
     markNeedsPaint();
   }
@@ -71,9 +72,6 @@ class SixStarObject extends RenderBox {
   /// param: [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
   @override
   void paint(PaintingContext context, Offset offset) {
-    // 注意, 真正绘制之前需要更新下paint
-    _paint.color = _paintColor;
-
     final canvas = context.canvas..translate(offset.dx, offset.dy);
     final width = size.width;
 
