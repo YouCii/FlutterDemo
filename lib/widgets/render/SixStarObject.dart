@@ -24,7 +24,9 @@ class SixStarObject extends RenderBox {
   Color _paintColor;
 
   set paintColor(Color value) {
-    if (value == _paintColor) return;
+    if (value == _paintColor) {
+      return;
+    }
     _paintColor = value;
     // 在属性变化时更新PipelineOwner的待paint待更新列表: PipelineOwner._nodesNeedingPaint.add(this);
     markNeedsPaint();
