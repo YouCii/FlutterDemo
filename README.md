@@ -87,9 +87,9 @@
   
 #### 自定义叶子`RenderObject`的关键点
 1. 继承`RenderObject`的子类`RenderBox`更简单, 它在父类的基础上实现了笛卡尔坐标系, 更易用; 
-2. 必须重写`isRepaintBoundary`为true或者用`RepaintBoundary`包裹, 否则会出现offset偏移的问题; 
-3. `paint`方法中需要刷新一下修改的参数, 才可以支持外部`setState`调用; 
-4. 必须重写此方法修改下`size`, 否则红屏错误; 
+2. 如果不重写`isRepaintBoundary`为true或者用`RepaintBoundary`包裹的话, 会出现offset偏移的情况; 
+3. `paint`方法中需要刷新一下修改的参数/或者修改变量时修改`painter`参数, 才可以支持外部`setState`时该参数的刷新; 
+4. 当`isRepaintBoundary`返回true时必须重写此方法去掉super, 否则红屏错误; 
      ```dart
      @override
      void performLayout() {
