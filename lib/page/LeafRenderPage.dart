@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/widgets/render/SixStarPaint.dart';
-import 'package:flutter_demo/widgets/render/SixStarWidget.dart';
+import 'package:flutter_demo/widgets/render/custompaint/SixStarPaint.dart';
+import 'package:flutter_demo/widgets/render/leafrender/SixStarWidget.dart';
 import 'dart:math';
 
-class RenderObjectPage extends StatefulWidget {
+class LeafRenderPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return RenderObjectState();
+    return _LeafRenderState();
   }
 }
 
-class RenderObjectState extends State<RenderObjectPage> {
+class _LeafRenderState extends State<LeafRenderPage> {
   Color _color1 = Colors.deepOrange;
   Color _color2 = Colors.greenAccent;
   double _size1 = 0xbb;
@@ -20,7 +20,7 @@ class RenderObjectState extends State<RenderObjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("自定义RenderObject"),
+        title: Text("自定义LeafRenderObject"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

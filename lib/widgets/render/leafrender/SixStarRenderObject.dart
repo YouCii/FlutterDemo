@@ -11,7 +11,7 @@ import 'package:flutter/rendering.dart';
 /// 2. [layout]和[paint], [performLayout]和[performResize]
 /// 3. [isRepaintBoundary]
 /// 4. [hitTest], [hitTestSelf], [hitTestChildren]
-class SixStarObject extends RenderBox {
+class SixStarRenderObject extends RenderBox {
   /// 画笔
   final Paint _paint = Paint()
     ..strokeWidth = 2
@@ -45,7 +45,7 @@ class SixStarObject extends RenderBox {
     markNeedsLayout();
   }
 
-  SixStarObject(this._paintColor, this._starSize) {
+  SixStarRenderObject(this._paintColor, this._starSize) {
     _paint.color = _paintColor;
   }
 
@@ -60,7 +60,7 @@ class SixStarObject extends RenderBox {
   /// 用来计算当前RenderObject布局, 并通知child调用自己的layout方法
   ///
   /// 根据父类方法中的注释，子类不应该重写此方法，
-  /// 子类应该应该通过重写会在此方法中被调用的performResize()和performLayout()来完成具体的layout操作
+  /// 子类应该通过重写会在此方法中被调用的performResize()和performLayout()来完成具体的layout操作
   /// 另外，layout中最后会调用[markNeedsPaint]
   ///
   /// param: [constraints] 指父节点对子节点的大小约束, 根据父节点的布局逻辑确定(BoxConstraints)

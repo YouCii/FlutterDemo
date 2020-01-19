@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/page/FuturePage.dart';
-import 'package:flutter_demo/page/IsolatePage.dart';
-import 'package:flutter_demo/page/RenderObjectPage.dart';
+import 'FuturePage.dart';
+import 'IsolatePage.dart';
+import 'LeafRenderPage.dart';
+import 'MultiRenderPage.dart';
 
 class TestListPage extends StatelessWidget {
   @override
@@ -12,7 +13,8 @@ class TestListPage extends StatelessWidget {
           SliverAppBar(title: Text("测试列表")),
           _getItemView(context, "Future", FuturePage()),
           _getItemView(context, "Isolute", IsolatePage()),
-          _getItemView(context, "RenderObject", RenderObjectPage()),
+          _getItemView(context, "LeafRenderObject", LeafRenderPage()),
+          _getItemView(context, "MultiRenderObject", MultiRenderPage()),
         ],
       ),
     );
