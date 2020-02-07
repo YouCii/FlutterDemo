@@ -152,6 +152,8 @@ class RingRenderObject extends RenderBox
   bool get sizedByParent => false;
 
   /// 计算固有最大高度 TODO width为什么可以传给子View计算?
+  /// 此系列方法的作用是: 在父类执行layout之前就可以获取到本view的宽高
+  /// 主要是提供给外部父view调用, 对于此测试demo, 这里是否重写并不影响效果
   @override
   double computeMaxIntrinsicHeight(double width) {
     return (_indexOfBottom + 1) *
