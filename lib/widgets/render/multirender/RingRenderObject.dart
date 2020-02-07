@@ -20,7 +20,11 @@ class RingRenderObject extends RenderBox
     ..strokeJoin = StrokeJoin.round // 线条交汇处样式
     ..color = Colors.red; // 颜色
 
+  /// 缓存childSize, 避免一帧中多次循环
+  double _childSize = 0.0;
+
   RingRenderObject({List<RenderBox> children}) {
+    // 循环insert
     addAll(children);
   }
 
@@ -37,11 +41,15 @@ class RingRenderObject extends RenderBox
   /// 其中[Flex]在[overflow]设置特殊值时进行了其他策略, 没有特殊要求前我们先直接使用[defaultPaint]
   @override
   void paint(PaintingContext context, Offset offset) {
-    double radius = _getRadius();
+    double childSize = _getChildSize();
+    double radius = _getRadius(childSize);
     context.canvas
       ..translate(offset.dx, offset.dy)
-      ..drawCircle(_getCircleCenter(radius), radius, _paint);
+      ..drawCircle(_getCircleCenter(childSize, radius), radius, _paint);
     defaultPaint(context, offset);
+
+    // 一帧绘制完成, 清除缓存数据
+    _childSize = 0.0;
   }
 
   /// 根据父类方法中的注释，子类不应该重写此方法，
@@ -55,9 +63,10 @@ class RingRenderObject extends RenderBox
   void performLayout() {
     _layoutChild();
 
-    double radius = _getRadius();
-    Offset circleCenter = _getCircleCenter(radius);
-    size = constraints.constrain(Size(circleCenter.dx * 2, circleCenter.dx * 2));
+    double childSize = _getChildSize();
+    double radius = _getRadius(childSize);
+    Offset circleCenter = _getCircleCenter(childSize, radius);
+    size = constraints.constrain(Size(circleCenter.dx * 2, circleCenter.dy * 2));
     _positionChild(radius, circleCenter);
   }
 
@@ -103,24 +112,31 @@ class RingRenderObject extends RenderBox
     }
   }
 
-  /// 获取布局圆环圆心
-  Offset _getCircleCenter(double radius) {
-    double sizeOfWidget = radius / _indexOfBottom;
-    return Offset(radius + sizeOfWidget / 2, radius + sizeOfWidget / 2);
+  /// 计算布局圆环圆心
+  Offset _getCircleCenter(double childSize, double radius) {
+    double circlePoint = radius + childSize / 2;
+    return Offset(circlePoint, circlePoint);
   }
 
-  /// 获取布局圆环半径 TODO 循环耗时待优化, 加缓存
+  /// 计算布局圆环半径
   /// 注意, 获取child.size之前必须要执行过[child.layout]才可以
-  double _getRadius() {
-    double maxWidth = _getMaxSizeOfChildren(0, (RenderBox child, double extent) {
-      return child.size.width;
-    });
-    double maxHeight = _getMaxSizeOfChildren(0, (RenderBox child, double extent) {
-      return child.size.height;
-    });
-    double adaptSize = max(maxHeight, maxWidth);
-    // index+1表示总个数, 直径/2返回半径
-    return (_indexOfBottom + 1) * adaptSize / 2;
+  double _getRadius(double childSize) {
+    // +1表示总个数, 这里简化计算, 只去除第一个的上半部分, 没有去除最后一个的下半部分, 所以半径会偏大
+    return (_indexOfBottom + 1 - 0.5) * childSize / 2;
+  }
+
+  /// 获取children中最大的宽高
+  double _getChildSize() {
+    if (_childSize < 0.1) {
+      double maxWidth = _getMaxSizeOfChildren(0, (RenderBox child, double extent) {
+        return child.size.width;
+      });
+      double maxHeight = _getMaxSizeOfChildren(0, (RenderBox child, double extent) {
+        return child.size.height;
+      });
+      _childSize = max(maxHeight, maxWidth);
+    }
+    return _childSize;
   }
 
   /// [sizedByParent]为false的话, 此方法不用重写
