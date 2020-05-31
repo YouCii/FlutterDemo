@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 /// 实现目标:
 /// 1. 所有child按角度平均分布到一个圆环上, 以圆环最高点为起点, 顺时针排列
 /// 2. 保证所有的child不能重叠
-/// 3. 以子View中最大的宽高为标准计算ViewGroup宽高, 即较小子view的宽高也按照子View中最大的宽高计算
+/// 3. 以子View中最大的宽高为标准计算ViewGroup宽高, 即较小child的宽高也按照子View中最大的宽高计算
 ///
 /// ps: 也可以不使用[RenderBox], 使用[RenderCustomMultiChildLayoutBox]实现, 它通过[MultiChildLayoutDelegate]实现, 与[CustomPaint]的设计思路差不多
 /// ps: ContainerRenderObjectMixin是系统默认提供的用于维护child绘制相关的工具类, 包括child的添加/移除/换位等;

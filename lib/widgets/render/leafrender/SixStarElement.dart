@@ -3,7 +3,6 @@ import 'package:flutter_demo/widgets/render/leafrender/SixStarWidget.dart';
 import 'package:flutter_demo/widgets/render/multirender/RingElement.dart';
 
 /// 复制自[LeafRenderObjectElement], 没有做逻辑上的修改
-/// Element逻辑优先级比较低, 完成RenderObject后再看
 class SixStarElement extends RenderObjectElement {
   SixStarElement(SixStarWidget widget) : super(widget);
 
@@ -45,8 +44,4 @@ class SixStarElement extends RenderObjectElement {
     super.update(newWidget);
   }
 
-  @override
-  List<DiagnosticsNode> debugDescribeChildren() {
-    return widget.debugDescribeChildren();
-  }
 }

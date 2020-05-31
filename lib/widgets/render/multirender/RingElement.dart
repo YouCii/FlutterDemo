@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_demo/widgets/render/multirender/RingWidget.dart';
-import 'package:flutter_demo/widgets/render/leafrender/SixStarElement.dart';
 
 /// 复制自[MultiChildRenderObjectElement], 没有做逻辑上的修改
 class RingElement extends RenderObjectElement {
@@ -14,18 +13,14 @@ class RingElement extends RenderObjectElement {
   @override
   RingWidget get widget => super.widget;
 
-  /// The current list of children of this element.
-  ///
-  /// This list is filtered to hide elements that have been forgotten (using
-  /// [forgetChild]).
+  /// child列表, 经_forgottenChildren过滤
   @protected
   @visibleForTesting
   Iterable<Element> get children => _children.where((Element child) => !_forgottenChildren.contains(child));
 
   List<Element> _children;
 
-  // We keep a set of forgotten children to avoid O(n^2) work walking _children
-  // repeatedly to remove children.
+  /// 避免O(n^2)时间复杂度的重复移除
   final Set<Element> _forgottenChildren = HashSet<Element>();
 
   /// attachRenderObject时调用 <= updateChild 中 inflateWidget
@@ -58,7 +53,7 @@ class RingElement extends RenderObjectElement {
     assert(renderObject == this.renderObject);
   }
 
-  /// TODO 暂时未搞清楚具体意图, 初步看是与设定GlobalKey的Widget的缓存复用有关
+  /// 避免O(n^2)时间复杂度的重复移除, 与设定GlobalKey的Widget的缓存复用有关
   @override
   void forgetChild(Element child) {
     assert(_children.contains(child));
@@ -81,7 +76,7 @@ class RingElement extends RenderObjectElement {
     _children = List<Element>(widget.children.length);
     Element previousChild;
     for (int i = 0; i < _children.length; i += 1) {
-      // 可能包含diff方法: updateChild
+      // 包含diff方法: updateChild
       final Element newChild = inflateWidget(widget.children[i], previousChild);
       _children[i] = newChild;
       previousChild = newChild;
@@ -98,9 +93,4 @@ class RingElement extends RenderObjectElement {
     _forgottenChildren.clear();
   }
 
-  /// 什么都不改, 只是为了与[SixStarElement]作对比
-  @override
-  List<DiagnosticsNode> debugDescribeChildren() {
-    return super.debugDescribeChildren();
-  }
 }
