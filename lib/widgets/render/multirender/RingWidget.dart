@@ -34,6 +34,7 @@ class RingWidget extends RenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RingRenderObject renderObject) {
-    // 这里无须更新RenderObject, 因为其混入类ContainerRenderObjectMixin内部维护了child的添加/移除/换位等操作
+    // 这里无须更新RenderObject, 因为在RingElement中处理了更新
+    // 其混入类ContainerRenderObjectMixin内部维护了child的添加/移除/换位等操作
   }
 }
