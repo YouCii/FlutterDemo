@@ -9,6 +9,16 @@ import 'package:flutter/rendering.dart';
 /// 3. 以子View中最大的宽高为标准计算ViewGroup宽高, 即较小子view的宽高也按照子View中最大的宽高计算
 ///
 /// ps: 也可以不使用[RenderBox], 使用[RenderCustomMultiChildLayoutBox]实现, 它通过[MultiChildLayoutDelegate]实现, 与[CustomPaint]的设计思路差不多
+/// ps: ContainerRenderObjectMixin是系统默认提供的用于维护child绘制相关的工具类, 包括child的添加/移除/换位等;
+///     RenderBoxContainerDefaultsMixin则补充了几个关于child的默认操作, 例如defaultPaint/defaultHitTestChildren方法;
+///     Flex/Stack都混入了以上两个Mixin.
+///
+/// 五部分比较重要的点:
+/// 1. [_paint]
+/// 2. [layout] 和 [paint] , [performLayout]和[performResize]
+/// 3. [isRepaintBoundary], [sizedByParent]
+/// 4. [hitTest], [hitTestSelf], [hitTestChildren]
+/// 5. [computeMaxIntrinsicHeight], [computeMinIntrinsicHeight], [computeMaxIntrinsicWidth], [computeMinIntrinsicWidth]
 class RingRenderObject extends RenderBox
     with ContainerRenderObjectMixin<RenderBox, MultiChildLayoutParentData>, RenderBoxContainerDefaultsMixin<RenderBox, MultiChildLayoutParentData> {
   /// 画笔
@@ -24,7 +34,7 @@ class RingRenderObject extends RenderBox
   double _childSize = 0.0;
 
   RingRenderObject({List<RenderBox> children}) {
-    // 循环insert
+    // 循环insert, 来自[ContainerRenderObjectMixin]
     addAll(children);
   }
 
@@ -41,11 +51,13 @@ class RingRenderObject extends RenderBox
   /// 其中[Flex]在[overflow]设置特殊值时进行了其他策略, 没有特殊要求前我们先直接使用[defaultPaint]
   @override
   void paint(PaintingContext context, Offset offset) {
+    // 绘制圆环
     double childSize = _getChildSize();
     double radius = _getRadius(childSize);
     context.canvas
       ..translate(offset.dx, offset.dy)
       ..drawCircle(_getCircleCenter(childSize, radius), radius, _paint);
+    // 此方法来自[RenderBoxContainerDefaultsMixin], 用于处理child的绘制
     defaultPaint(context, offset);
 
     // 一帧绘制完成, 清除缓存数据
@@ -66,12 +78,14 @@ class RingRenderObject extends RenderBox
     double childSize = _getChildSize();
     double radius = _getRadius(childSize);
     Offset circleCenter = _getCircleCenter(childSize, radius);
+    // 如果[sizedByParent]为false的话, 就需要我们自己更新size
     size = constraints.constrain(Size(circleCenter.dx * 2, circleCenter.dy * 2));
     _positionChild(radius, circleCenter);
   }
 
   /// 遍历调用child.layout
   void _layoutChild() {
+    // 此字段来自[ContainerRenderObjectMixin]
     RenderBox child = firstChild;
     while (child != null) {
       BoxConstraints innerConstraints = BoxConstraints(
@@ -139,6 +153,7 @@ class RingRenderObject extends RenderBox
     return _childSize;
   }
 
+  /// 只有[sizedByParent]为true, 即父布局size改变引起当前resize时, [performResize]才会被调用, 而[performLayout]是必定会被调用
   /// [sizedByParent]为false的话, 此方法不用重写
   @override
   void performResize() {
@@ -151,7 +166,7 @@ class RingRenderObject extends RenderBox
   @override
   bool get sizedByParent => false;
 
-  /// 计算固有最大高度 TODO width为什么可以传给子View计算?
+  /// 计算固有最大高度
   /// 此系列方法的作用是: 在父类执行layout之前就可以获取到本view的宽高
   /// 主要是提供给外部父view调用, 对于此测试demo, 这里是否重写并不影响效果
   @override
@@ -217,6 +232,7 @@ class RingRenderObject extends RenderBox
   /// [RenderCustomMultiChildLayoutBox]和[Flex]均使用了[RenderBoxContainerDefaultsMixin.defaultHitTestChildren]方法
   @override
   bool hitTestChildren(BoxHitTestResult result, {Offset position}) {
+    // 来自 RenderBoxContainerDefaultsMixin
     return defaultHitTestChildren(result, position: position);
   }
 }
