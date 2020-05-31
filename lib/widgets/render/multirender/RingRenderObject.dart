@@ -13,12 +13,13 @@ import 'package:flutter/rendering.dart';
 ///     RenderBoxContainerDefaultsMixin则补充了几个关于child的默认操作, 例如defaultPaint/defaultHitTestChildren方法;
 ///     Flex/Stack都混入了以上两个Mixin.
 ///
-/// 五部分比较重要的点:
+/// 六部分比较重要的点:
 /// 1. [_paint]
 /// 2. [layout] 和 [paint] , [performLayout]和[performResize]
 /// 3. [isRepaintBoundary], [sizedByParent]
 /// 4. [hitTest], [hitTestSelf], [hitTestChildren]
-/// 5. [computeMaxIntrinsicHeight], [computeMinIntrinsicHeight], [computeMaxIntrinsicWidth], [computeMinIntrinsicWidth]
+/// 5. [setupParentData]
+/// 6. [computeMaxIntrinsicHeight], [computeMinIntrinsicHeight], [computeMaxIntrinsicWidth], [computeMinIntrinsicWidth]
 class RingRenderObject extends RenderBox
     with ContainerRenderObjectMixin<RenderBox, MultiChildLayoutParentData>, RenderBoxContainerDefaultsMixin<RenderBox, MultiChildLayoutParentData> {
   /// 画笔

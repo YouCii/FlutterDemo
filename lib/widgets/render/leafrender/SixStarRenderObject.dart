@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart';
 /// 四部分比较重要的点:
 /// 1. [_paint], [_paintColor], [_starSize]
 /// 2. [layout]和[paint], [performLayout]和[performResize]
-/// 3. [isRepaintBoundary]
+/// 3. [isRepaintBoundary], [sizedByParent]
 /// 4. [hitTest], [hitTestSelf], [hitTestChildren]
 class SixStarRenderObject extends RenderBox {
   /// 画笔
