@@ -25,28 +25,31 @@ class RingElement extends RenderObjectElement {
 
   /// attachRenderObject时调用 <= updateChild 中 inflateWidget
   @override
-  void insertChildRenderObject(RenderObject child, Element slot) {
-    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject = this.renderObject;
+  void insertChildRenderObject(RenderObject child, IndexedSlot<Element> slot) {
+    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject =
+    this.renderObject as ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>;
     assert(renderObject.debugValidateChild(child));
     // 代替了Widget.updateRenderObject
-    renderObject.insert(child, after: slot?.renderObject);
+    renderObject.insert(child, after: slot?.value?.renderObject);
     assert(renderObject == this.renderObject);
   }
 
   /// _updateSlot时调用 <= updateChild 中 updateSlotForChild
   @override
-  void moveChildRenderObject(RenderObject child, dynamic slot) {
-    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject = this.renderObject;
+  void moveChildRenderObject(RenderObject child, IndexedSlot<Element> slot) {
+    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject =
+    this.renderObject as ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>;
     assert(child.parent == renderObject);
     // 代替了Widget.updateRenderObject
-    renderObject.move(child, after: slot?.renderObject);
+    renderObject.move(child, after: slot?.value?.renderObject);
     assert(renderObject == this.renderObject);
   }
 
   /// detachRenderObject时调用 <= updateChild 中 deactivateChild
   @override
   void removeChildRenderObject(RenderObject child) {
-    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject = this.renderObject;
+    final ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>> renderObject =
+    this.renderObject as ContainerRenderObjectMixin<RenderObject, ContainerParentDataMixin<RenderObject>>;
     assert(child.parent == renderObject);
     // 代替了Widget.updateRenderObject
     renderObject.remove(child);
@@ -59,13 +62,15 @@ class RingElement extends RenderObjectElement {
     assert(_children.contains(child));
     assert(!_forgottenChildren.contains(child));
     _forgottenChildren.add(child);
+    super.forgetChild(child);
   }
 
   /// 提供遍历children方法给framework类update时调用
   @override
   void visitChildren(ElementVisitor visitor) {
-    for (Element child in _children) {
-      if (!_forgottenChildren.contains(child)) visitor(child);
+    for (final Element child in _children) {
+      if (!_forgottenChildren.contains(child))
+        visitor(child);
     }
   }
 
@@ -77,7 +82,7 @@ class RingElement extends RenderObjectElement {
     Element previousChild;
     for (int i = 0; i < _children.length; i += 1) {
       // 包含diff方法: updateChild
-      final Element newChild = inflateWidget(widget.children[i], previousChild);
+      final Element newChild = inflateWidget(widget.children[i], IndexedSlot<Element>(i, previousChild));
       _children[i] = newChild;
       previousChild = newChild;
     }
