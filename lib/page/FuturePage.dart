@@ -24,7 +24,8 @@ class _FutureState extends State<FuturePage> {
       });
     });
 
-    // 此Future没有延迟/耗时操作, 所以Then会比后面的代码插入的Event较先执行到
+    // 此Future没有延迟/耗时操作, 会立即放入event-queue最后;
+    // 但是后面的代码已经存在于event中, 所以"正常流1","正常流2"都会先于此执行, 甚至_test方法后的"正常流3"也会先执行
     Future.value("no delay").then((value) {
       setState(() {
         _formatLogString(value);
@@ -32,17 +33,25 @@ class _FutureState extends State<FuturePage> {
     });
 
     setState(() {
-      _formatLogString(_doFuture(2).then((position) {
-        setState(() {
-          _formatLogString("Then" + position.toString());
-        });
-      }).toString());
+      _formatLogString("正常流1");
     });
 
-    int result = await _doFuture(3);
+    setState(() {
+      _formatLogString("正常流2");
+    });
+
+    int result = await _doFuture(2);
     setState(() {
       _formatLogString("Then" + result.toString());
-      _isRunning = false;
+    });
+
+    setState(() {
+      _formatLogString(_doFuture(3).then((position) {
+        setState(() {
+          _formatLogString("Then" + position.toString());
+          _isRunning = false;
+        });
+      }).toString());
     });
   }
 
@@ -64,7 +73,13 @@ class _FutureState extends State<FuturePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Expanded(child: Text(_log)),
+            Expanded(
+              child: Container(
+                width: double.maxFinite,
+                padding: EdgeInsets.all(10),
+                child: Text(_log),
+              ),
+            ),
             Container(
               margin: EdgeInsets.only(bottom: 10),
               child: RaisedButton(
@@ -73,6 +88,9 @@ class _FutureState extends State<FuturePage> {
                     ? null
                     : () {
                         _test();
+                        setState(() {
+                          _formatLogString("正常流3");
+                        });
                       },
               ),
             ),
