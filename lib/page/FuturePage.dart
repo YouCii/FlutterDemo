@@ -11,7 +11,8 @@ class _FutureState extends State<FuturePage> {
   String _log = "";
   bool _isRunning = false;
 
-  /// Future把事件插入到EventQueue的末尾
+  /// Future把事件插入到EventQueue的末尾.
+  /// 同步代码先执行, 然后才是MicroTask以及EventLoop, 所以"Before"和"After"会先于任何一个Future执行
   void _test() async {
     setState(() {
       _isRunning = true;
@@ -87,9 +88,12 @@ class _FutureState extends State<FuturePage> {
                 onPressed: _isRunning
                     ? null
                     : () {
+                        setState(() {
+                          _formatLogString("Before");
+                        });
                         _test();
                         setState(() {
-                          _formatLogString("正常流3");
+                          _formatLogString("After");
                         });
                       },
               ),

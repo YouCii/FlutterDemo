@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/page/FuturePage.dart';
-import 'package:flutter_demo/page/IsolatePage.dart';
+import 'FuturePage.dart';
+import 'IsolatePage.dart';
+import 'LeafRenderPage.dart';
+import 'MultiRenderPage.dart';
 
 class TestListPage extends StatelessWidget {
   @override
@@ -9,27 +11,24 @@ class TestListPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(title: Text("测试列表")),
-          SliverToBoxAdapter(
-            child: RaisedButton(
-              child: Text("Future"),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FuturePage();
-                }));
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: RaisedButton(
-              child: Text("Isolute"),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return IsolatePage();
-                }));
-              },
-            ),
-          ),
+          _getItemView(context, "Future", FuturePage()),
+          _getItemView(context, "Isolute", IsolatePage()),
+          _getItemView(context, "LeafRenderObject", LeafRenderPage()),
+          _getItemView(context, "MultiRenderObject", MultiRenderPage()),
         ],
+      ),
+    );
+  }
+
+  Widget _getItemView(BuildContext context, String title, Widget nextPage) {
+    return SliverToBoxAdapter(
+      child: RaisedButton(
+        child: Text(title),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return nextPage;
+          }));
+        },
       ),
     );
   }
