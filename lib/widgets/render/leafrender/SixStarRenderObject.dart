@@ -49,7 +49,8 @@ class SixStarRenderObject extends RenderBox {
     _paint.color = _paintColor;
   }
 
-  /// 重写为true或者用[RepaintBoundary]包裹该Widget时会规定此Widget不会影响父布局, 如果不重写可能会出现相对于父布局的offset偏移
+  /// 重写为true或者用[RepaintBoundary]包裹该Widget时会规定此Widget不会影响父布局,
+  /// 如果不重写可能会出现相对于父布局的offset偏移
   /// 在[markNeedsPaint]时会判断此属性, 如果false会调用[parent.markNeedsPaint]
   ///
   /// [isRepaintBoundary] 绘制边界
@@ -74,9 +75,11 @@ class SixStarRenderObject extends RenderBox {
   /// param: [offset]是取自父节点的[BoxParentData], 所以设置[isRepaintBoundary]为true后不再有offset
   @override
   void paint(PaintingContext context, Offset offset) {
+    // 先通过PaintingContext构建出Canvas
     final canvas = context.canvas..translate(offset.dx, offset.dy);
     final width = size.width;
 
+    // 具体的绘制
     Offset point1Top = Offset(width / 2, 0);
     Offset point1Left = Offset(width * (2 - sqrt(3)) / 4, width * 3 / 4);
     Offset point1Right = Offset(width * (2 + sqrt(3)) / 4, width * 3 / 4);
@@ -96,19 +99,20 @@ class SixStarRenderObject extends RenderBox {
     canvas.drawCircle(Offset(width / 2, width / 2), width / 2, _paint);
   }
 
-  /// [performLayout]和[performResize]都是在[layout]中被调用的
+  /// [performLayout]和[performResize]都是在[layout]中被调用的, 其中[performLayout]必定会被调用
   /// 如果[sizedByParent]为false则必须重写此方法, 否则红屏
   @override
   void performLayout() {
     size = constraints.constrain(Size(_starSize, _starSize));
   }
 
-  /// 只有[sizedByParent]为true,即父布局size改变引起当前resize时, [performResize]才会被调用, 而[performLayout]是必定会被调用
+  /// 只有[sizedByParent]为true时[performResize]才会被调用
   @override
   void performResize() {
     super.performResize();
   }
 
+  /// true表示父布局size改变会引起当前控件resize
   @override
   bool get sizedByParent => false;
 
