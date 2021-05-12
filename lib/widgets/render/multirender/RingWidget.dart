@@ -18,7 +18,7 @@ class RingWidget extends RenderObjectWidget {
         assert(() {
           final int index = children.indexOf(null);
           if (index >= 0) {
-            throw FlutterError("$runtimeType的子View不能包含null, 但下标$index处是null了, 快tm检查一下吧!");
+            throw FlutterError("RingWidget的子View不能包含null, 但下标$index处是null了, 快tm检查一下吧!");
           }
           return true;
         }()),
